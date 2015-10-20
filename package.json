@@ -1,0 +1,11 @@
+{
+  "name": "mobile-ua",
+  "version": "1.0.0",
+  "description": "analyze mobile UserAgent to get as much infomation as possible",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "darkylin",
+  "license": "ISC"
+}
