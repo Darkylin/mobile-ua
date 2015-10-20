@@ -1,6 +1,5 @@
-exports.alias = {
+module.exports = {
     qunaraphone:'qunar',
     qunariphone:'qunar',
     MicroMessenger:'wechat',
-
-}
+};

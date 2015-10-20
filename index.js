@@ -1,65 +1,14 @@
 var SPLIT_REG = /.*\(([^)]+)\) ([^)]+\)( *Version\/[\d.]+)?)[; ]*(\b.+)/,
     UA_HEADER_REG = /^[a-zA-Z\-]+/;
 
-// 注意搜索引擎爬虫及OPS的处理
-var CRAWLER_HEADER_LIST = [
-    'Apache-HttpClient',
-    'Dalvik',
-    'nagios',//网络监视工具，小心不要误杀
-    'spider-ads',
-    'Java'
-];
-
-var uaHeaderProcessors = {
-    // 富可视 http://www.infocus.com.cn/
-    InFocus: function (ua) {
-        return {
-            status: 0,
-            browserName: 'InFocus',
-            os: '',
-            phone: 'InFocus'
-        }
-    },
-    // 波导手机
-    Bird: uaHeaderBird,
-    'Bird-L108': uaHeaderBird
-}
-function uaHeaderBird(ua) {
-    return {
-        status: 0,
-        browserName: 'bird'
-    }
-}
-//添加所有爬虫（模拟器）UA头处理函数
-CRAWLER_HEADER_LIST.forEach(function (crawlerName) {
-    uaHeaderProcessors[crawlerName] = function () {
-        return {
-            status: 1,
-            browserName: crawlerName
-        }
-    }
-});
-
-var UA_TXT_REG = /Googlebot/;
-//上面是针对UA头进行处理，如果失败再试试针对整个UA字符串进行判断
-function uaTxtProcessor(ua) {
-    var regResult = UA_TXT_REG.exec(ua);
-    if (!regResult) {
-        return null;
-    }
-    return {
-        status: 1,
-        browserName: regResult
-    }
-}
 /**
  *
  * @param ua
- * @returns {
- *      status:[int] 负数代表解析失败，0代表普通浏览器，1代表模拟器
- *      browser:[string] 浏览器名称，这个是该浏览器通俗叫法，比如微信(wechat)，新浪微博(weibo)，解析失败或模拟器等为undefined
- *      browserName:[string] 浏览器名称，这个是UA中的名称
- * }
+ * @returns
+ *      status : [int] 负数代表解析失败，0代表普通浏览器，1代表模拟器
+ *      browser : [string] 浏览器名称，这个是该浏览器通俗叫法，比如微信(wechat)，新浪微博(weibo)，解析失败或模拟器等为undefined
+ *      browserName : [string] 浏览器名称，这个是UA中的名称
+ *
  */
 function analyze(ua) {
     var splitResult = SPLIT_REG.exec(ua);
@@ -88,5 +37,5 @@ function analyze(ua) {
 }
 module.exports = analyze;
 
-var testUa = 'Apache-HttpClient/4.0.1 (java 1.5)';
+var testUa = 'Mozilla/5.0 (Linux; U; Android 4.2.2; zh-cn; 2014011 Build/HM2014011) AppleWebKit/533.1 (KHTML, like Gecko)Version/4.0 MQQBrowser/5.4 TBS/025469 Mobile Safari/533.1 MicroMessenger/6.2.5.54_re87237d.622 NetType/WIFI Language/zh_CN';
 console.dir(analyze(testUa))

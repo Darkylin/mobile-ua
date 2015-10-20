@@ -9,4 +9,4 @@ log.split('\n').forEach(function (str) {
     if (uaInfo.status < 0) {
         console.log(str);
     }
-})
+});
